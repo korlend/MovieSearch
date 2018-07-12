@@ -1,0 +1,45 @@
+<div class="movie-container">
+    <div class="title">
+        <h2 mat-button (click)="openMovie()">{{title}} ({{year}})</h2>
+    </div>
+    <div class="short" *ngIf="shortMovie && !fullMovie">
+        <img src="{{shortMovie.Poster}}">
+        <div>
+            <span>{{shortMovie.Type}}</span>
+        </div>
+    </div>
+    <div class="full" *ngIf="fullMovie">
+        <img src="{{fullMovie.Poster}}">
+        <div class="">
+            <span>{{fullMovie.Type}}</span>
+            <!-- <span>{{fullMovie.Title}}</span> -->
+            <!-- <span>{{fullMovie.Year}}</span> -->
+            <span>{{fullMovie.Rated}}</span>
+            <span>{{fullMovie.Released}}</span>
+            <span>{{fullMovie.Runtime}}</span>
+            <span>{{fullMovie.Genre}}</span>
+            <span>{{fullMovie.Director}}</span>
+            <span>{{fullMovie.Writer}}</span>
+            <span>{{fullMovie.Actors}}</span>
+            <span>{{fullMovie.Plot}}</span>
+            <span>{{fullMovie.Language}}</span>
+            <span>{{fullMovie.Country}}</span>
+            <span>{{fullMovie.Awards}}</span>
+            <span>{{fullMovie.Poster}}</span>
+            <span>{{fullMovie.Ratings}}</span>
+            <span>{{fullMovie.Metascore}}</span>
+            <span>{{fullMovie.imdbRating}}</span>
+            <span>{{fullMovie.imdbVotes}}</span>
+            <span>{{fullMovie.imdbID}}</span>
+            <span>{{fullMovie.Type}}</span>
+            <span>{{fullMovie.DVD}}</span>
+            <span>{{fullMovie.BoxOffice}}</span>
+            <span>{{fullMovie.Production}}</span>
+            <span>{{fullMovie.Website}}</span>
+            <span>{{fullMovie.Response}}</span>
+        </div>
+    </div>
+</div>
+<div class="">
+
+</div>

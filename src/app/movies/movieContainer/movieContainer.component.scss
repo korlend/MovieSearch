@@ -1,0 +1,23 @@
+
+%description {
+    display: flex;
+}
+
+.movie-container {
+
+    .title {
+        margin: 0;
+    }
+
+    .short {
+        @extend %description;
+    }
+
+    .full {
+        @extend %description;
+    }
+
+    img {
+        height: 200px;
+    }
+}

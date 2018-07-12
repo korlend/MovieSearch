@@ -1,0 +1,35 @@
+<div class="search-container">
+    <mat-tab-group>
+        <mat-tab label="Search">
+            <mat-grid-list cols="3" rowHeight="5:1">
+                <mat-grid-tile>
+                    <mat-form-field>
+                        <input matInput placeholder="Start typing movie name" [(ngModel)]="simpleSearchObject.s" (keyup.enter)="searchMovies()">
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-form-field>
+                        <input matInput placeholder="Year" [(ngModel)]="simpleSearchObject.y" (keyup.enter)="searchMovies()">
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-form-field>
+                        <mat-select placeholder="Movie type" [(ngModel)]="simpleSearchObject.type">
+                            <mat-option *ngFor="let type of OMDBTypeList" [value]="type">
+                                {{type}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <div class="movies">
+                <ng-container *ngFor="let movie of lastSearch?.Search">
+                    <movie-container [shortMovie]="movie" [movieClicked]="movieClicked"></movie-container>
+                </ng-container>
+            </div>
+        </mat-tab>
+        <mat-tab *ngFor="let movie of openedMovies" label="{{_loading ? 'loading... ' : ''}}{{movie.shortData.Title}}">
+            <movie-container [fullMovie]="movie.fullData" [shortMovie]="movie"></movie-container>
+        </mat-tab>
+    </mat-tab-group>
+</div>
