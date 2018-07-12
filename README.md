@@ -1,4 +1,8 @@
-# WebClient
+# Project purpose
+
+Project was developed as test task to certain company.
+
+## WebClient
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
