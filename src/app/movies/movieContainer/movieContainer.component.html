@@ -4,42 +4,32 @@
     </div>
     <div class="short" *ngIf="shortMovie && !fullMovie">
         <img src="{{shortMovie.Poster}}">
-        <div>
+        <div class="movie-details">
             <span>{{shortMovie.Type}}</span>
         </div>
     </div>
     <div class="full" *ngIf="fullMovie">
         <img src="{{fullMovie.Poster}}">
-        <div class="">
-            <span>{{fullMovie.Type}}</span>
-            <!-- <span>{{fullMovie.Title}}</span> -->
-            <!-- <span>{{fullMovie.Year}}</span> -->
-            <span>{{fullMovie.Rated}}</span>
-            <span>{{fullMovie.Released}}</span>
-            <span>{{fullMovie.Runtime}}</span>
-            <span>{{fullMovie.Genre}}</span>
-            <span>{{fullMovie.Director}}</span>
-            <span>{{fullMovie.Writer}}</span>
-            <span>{{fullMovie.Actors}}</span>
-            <span>{{fullMovie.Plot}}</span>
-            <span>{{fullMovie.Language}}</span>
-            <span>{{fullMovie.Country}}</span>
-            <span>{{fullMovie.Awards}}</span>
-            <span>{{fullMovie.Poster}}</span>
-            <span>{{fullMovie.Ratings}}</span>
-            <span>{{fullMovie.Metascore}}</span>
-            <span>{{fullMovie.imdbRating}}</span>
-            <span>{{fullMovie.imdbVotes}}</span>
-            <span>{{fullMovie.imdbID}}</span>
-            <span>{{fullMovie.Type}}</span>
-            <span>{{fullMovie.DVD}}</span>
-            <span>{{fullMovie.BoxOffice}}</span>
-            <span>{{fullMovie.Production}}</span>
-            <span>{{fullMovie.Website}}</span>
-            <span>{{fullMovie.Response}}</span>
+        <div class="movie-details">
+            <span>{{fullMovie.Type}} - {{fullMovie.Runtime}}, {{fullMovie.Rated}}, {{fullMovie.Released}} by {{fullMovie.Production}}</span>
+            <span>Genre: {{fullMovie.Genre}}</span>
+            <span>Director: {{fullMovie.Director}}</span>
+            <span>Writer: {{fullMovie.Writer}}</span>
+            <span>Actors: {{fullMovie.Actors}}</span>
+            <span>Language: {{fullMovie.Language}}, Country: {{fullMovie.Country}}</span>
+            <span>Earnings: {{fullMovie.BoxOffice}}</span>
+            <span>Description: {{fullMovie.Plot}}</span>
+            <!-- <span>{{fullMovie.Awards}}</span> -->
+            <span>Ratings:&nbsp;
+                <ng-container *ngFor="let rating of fullMovie.Ratings">
+                    {{rating.Source}}: {{rating.Value}}&nbsp;
+                </ng-container>
+            </span>
+            <!-- <span>{{fullMovie.Metascore}}</span> -->
+            <!-- <span>{{fullMovie.imdbRating}}</span> -->
+            <!-- <span>{{fullMovie.imdbVotes}}</span> -->
+            <!-- <span>{{fullMovie.DVD}}</span> -->
+            <span></span>
         </div>
     </div>
-</div>
-<div class="">
-
 </div>

@@ -17,6 +17,11 @@
         @extend %description;
     }
 
+    .movie-details {
+        padding-left: 5px;
+        display: grid;
+    }
+
     img {
         height: 200px;
     }

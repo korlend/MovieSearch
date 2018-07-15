@@ -4,7 +4,11 @@ import { OMDBType } from '@app/core/models/OMBDAPI/enums/type';
 import { SearchDataResponse } from '@app/core/models/OMBDAPI/searchDataResponse';
 import { SearchDataRequest } from '@app/core/models/OMBDAPI/searchDataRequest';
 import { ShortDataResponse } from '@app/core/models/OMBDAPI/shortDataResponse';
-import { FullDataResponse } from '@app/core/models/OMBDAPI/fullDataResponse';
+import { NgRedux, select } from '@angular-redux/store';
+import { IMoviesState } from '@app/core/store/movies/movies.store';
+import { MoviesActions } from '@app/core/store/movies/movies.actions';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 enum ViewType {
     list, grid
@@ -15,7 +19,6 @@ class OpenedMovie {
     _loading = false;
 
     shortData: ShortDataResponse;
-    fullData: FullDataResponse;
 
     constructor(shortData: ShortDataResponse, loading = false) {
         this.shortData = shortData;
@@ -26,49 +29,69 @@ class OpenedMovie {
 @Component({
     selector: 'movies',
     templateUrl: './movies.component.html',
-    styleUrls: ['./movies.component.scss']
+    styleUrls: ['./movies.component.scss'],
 })
 export class MoviesComponent implements OnInit {
 
     OMDBTypeList = new Array<string>();
 
-    viewType: ViewType = ViewType.grid;
-    openedMovies: Array<OpenedMovie> = [];
-    movieClicked = new EventEmitter<ShortDataResponse>();
+    viewType: ViewType = ViewType.grid; // TODO: implement different search output methods
+
+    @select('movies') readonly openedMovies: Observable<Array<OpenedMovie>>; //
     movieClosed = new EventEmitter<void>();
 
     simpleSearchObject: SearchDataRequest = new SearchDataRequest();
+    years: Array<number> = (() => { return Array.from<number>({ length: new Date().getFullYear() + 1 },).map((v, i) => v = i).reverse().splice(0, 150); })();
 
     currentPage = '1';
     lastSearch: SearchDataResponse;
 
-    constructor(private ombdApiService: OMDBAPIService) {
+    searchInputControl = new FormControl();
+    filteredOptions: Array<ShortDataResponse>;
+
+    // temporary commented, till decision to make delay on search
+    // _searchTimeoutLasting = 500; // millisecond wait to activate movies search (after typing)
+    // _searchTimeout;
+
+    constructor(
+        private ombdApiService: OMDBAPIService,
+        private ngRedux: NgRedux<IMoviesState>,
+        private actions: MoviesActions) {
         for (const key in OMDBType) {
             if (OMDBType.hasOwnProperty(key)) {
                 this.OMDBTypeList.push(key);
             }
         }
-        this.movieClicked.subscribe(shortData => this.openMovieInTab(shortData));
+    }
+
+    ngOnInit() {
+        this.searchInputControl.valueChanges.subscribe((searchStr) => {
+            this._filterMovies(searchStr);
+        });
+    }
+
+    private _filterMovies(searchStr: string) {
+        this.simpleSearchObject.s = searchStr;
+        this.ombdApiService.search(this.simpleSearchObject)
+            .toPromise()
+            .then((data: SearchDataResponse) => {
+                this.filteredOptions = data.Search;
+            });
     }
 
     openMovieInTab(shortData: ShortDataResponse) {
-        const movie = new OpenedMovie(shortData, true);
-        this.openedMovies.push(movie);
-        console.log(this.openedMovies);
-        this.ombdApiService.searchById(shortData.imdbID).then(r => {
-            movie.fullData = r;
-            movie._loading = false;
-        });
+        this.ngRedux.dispatch(this.actions.insert(shortData));
+    }
+
+    closeMovieTab(shortData: ShortDataResponse) {
+        this.ngRedux.dispatch(this.actions.delete(shortData));
     }
 
     searchMovies() {
-        this.ombdApiService.search(this.simpleSearchObject).then(r => {
-            this.lastSearch = r;
-        });
+        console.log(this.lastSearch);
+        this.ombdApiService.search(this.simpleSearchObject).toPromise()
+            .then((data: SearchDataResponse) => {
+                this.lastSearch = data;
+            });
     }
-
-    ngOnInit(): void {
-
-    }
-
 }

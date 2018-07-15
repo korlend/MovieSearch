@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FullDataResponse } from '@app/core/models/OMBDAPI/fullDataResponse';
 import { ShortDataResponse } from '@app/core/models/OMBDAPI/shortDataResponse';
+import { OMDBAPIService } from '@app/core/services/OMDBAPI.service';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'movie-container',
@@ -10,34 +12,44 @@ import { ShortDataResponse } from '@app/core/models/OMBDAPI/shortDataResponse';
 export class MovieContainerComponent implements OnInit {
 
     @Input()
-    shortMovie: ShortDataResponse;
-
+    shortMovie: ShortDataResponse; // used for search data output
     @Input()
-    fullMovie: FullDataResponse;
+    extComp = false; // if true, then it uses fullMovie, which is loaded itself by this component
 
-    @Input()
-    movieClicked: EventEmitter<ShortDataResponse>;
+    @Output()
+    movieClicked: EventEmitter<ShortDataResponse> = new EventEmitter<ShortDataResponse>(); // used to emit tab creation
+
+    fullMovie: FullDataResponse; // used to view full data in separate tab
 
     title: string;
     year: string;
 
-    constructor() { }
+    constructor(private ombdApiService: OMDBAPIService) { }
 
     ngOnInit(): void {
         if (this.shortMovie) {
             this.title = this.shortMovie.Title;
             this.year = this.shortMovie.Year;
-        } else if (this.fullMovie) {
-            this.title = this.fullMovie.Title;
-            this.year = this.fullMovie.Year;
         } else {
             this.title = 'Error while loading movie info...';
             this.year = 'Sorry';
         }
+        this.loadFullMovieInfo();
+    }
+
+    loadFullMovieInfo() {
+        if (!this.extComp) {
+            return;
+        }
+        console.log(this.shortMovie);
+        this.ombdApiService.searchById(this.shortMovie.imdbID).subscribe((r: FullDataResponse) => {
+            this.fullMovie = r;
+            console.log(r);
+        });
     }
 
     openMovie() {
-        if (this.movieClicked && this.shortMovie) {
+        if (!this.extComp && this.movieClicked && this.shortMovie) {
             this.movieClicked.emit(this.shortMovie);
         }
     }

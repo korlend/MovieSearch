@@ -7,16 +7,19 @@ import { HeaderComponent } from '@app/header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule, MatGridListModule, MatSelectModule, MatTabsModule } from '@angular/material';
+import { MatInputModule, MatGridListModule, MatSelectModule, MatTabsModule, MatIconModule, MatAutocompleteModule, MatSliderModule } from '@angular/material';
 import { ErrorPageComponent } from '@app/errorPage/errorPage.component';
 import { AboutComponent } from '@app/about/about.component';
 import { MoviesComponent } from '@app/movies/movies.component';
 import { OMDBAPIService } from '@app/core/services/OMDBAPI.service';
 import { HttpModule } from '@angular/http';
-import { LocalStorageModule } from 'angular-2-local-storage';
 import { MovieContainerComponent } from '@app/movies/movieContainer/movieContainer.component';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MoviesActions } from '@app/core/store/movies/movies.actions';
+import { IMoviesState, moviesReducer, MOVIES_INITIAL_STATE } from '@app/core/store/movies/movies.store';
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -31,8 +34,10 @@ import { FormsModule } from '@angular/forms';
   entryComponents: [
   ],
   imports: [
+    CommonModule,
     FormsModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     NoopAnimationsModule,
     MatMenuModule,
     MatButtonModule,
@@ -40,14 +45,14 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatIconModule,
     MatTabsModule,
+    MatSliderModule,
     MatGridListModule,
+    MatAutocompleteModule,
     BrowserModule,
     HttpModule,
-    LocalStorageModule.withConfig({
-      prefix: 'b2bcashlimited',
-      storageType: 'localStorage'
-    }),
+    NgReduxModule,
     RouterModule.forRoot([
       {
         path: '',
@@ -68,8 +73,15 @@ import { FormsModule } from '@angular/forms';
     ])
   ],
   providers: [
-    OMDBAPIService
+    OMDBAPIService,
+    MoviesActions
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(ngRedux: NgRedux<IMoviesState>) {
+    ngRedux.configureStore(
+      moviesReducer,
+      MOVIES_INITIAL_STATE);
+  }
+}
