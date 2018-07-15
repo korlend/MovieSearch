@@ -7,6 +7,11 @@
 
     .title {
         margin: 0;
+        cursor: pointer;
+
+        :hover {
+            border: 1px solid grey;
+        }
     }
 
     .short {
