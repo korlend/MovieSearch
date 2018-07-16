@@ -9,6 +9,7 @@ import { IMoviesState } from '@app/core/store/movies/movies.store';
 import { MoviesActions } from '@app/core/store/movies/movies.actions';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { PageEvent } from '@angular/material';
 
 enum ViewType {
     list, grid
@@ -41,7 +42,7 @@ export class MoviesComponent implements OnInit {
     movieClosed = new EventEmitter<void>();
 
     simpleSearchObject: SearchDataRequest = new SearchDataRequest();
-    years: Array<number> = (() => { return Array.from<number>({ length: new Date().getFullYear() + 1 },).map((v, i) => v = i).reverse().splice(0, 150); })();
+    years: Array<number> = (() => { return Array.from<number>({ length: new Date().getFullYear() + 1 }, ).map((v, i) => v = i).reverse().splice(0, 150); })();
 
     currentPage = '1';
     lastSearch: SearchDataResponse;
@@ -79,6 +80,11 @@ export class MoviesComponent implements OnInit {
             });
     }
 
+    paginatorChanged(pageData: PageEvent) {
+        this.simpleSearchObject.page = pageData.pageIndex + 1 + '';
+        this.searchMovies();
+    }
+
     openMovieInTab(shortData: ShortDataResponse) {
         this.ngRedux.dispatch(this.actions.insert(shortData));
     }
@@ -88,7 +94,6 @@ export class MoviesComponent implements OnInit {
     }
 
     searchMovies() {
-        console.log(this.lastSearch);
         this.ombdApiService.search(this.simpleSearchObject).toPromise()
             .then((data: SearchDataResponse) => {
                 this.lastSearch = data;

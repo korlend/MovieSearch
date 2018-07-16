@@ -7,7 +7,7 @@ import { HeaderComponent } from '@app/header/header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule, MatGridListModule, MatSelectModule, MatTabsModule, MatIconModule, MatAutocompleteModule, MatSliderModule } from '@angular/material';
+import { MatInputModule, MatGridListModule, MatSelectModule, MatTabsModule, MatIconModule, MatAutocompleteModule, MatSliderModule, MatPaginatorModule } from '@angular/material';
 import { ErrorPageComponent } from '@app/errorPage/errorPage.component';
 import { AboutComponent } from '@app/about/about.component';
 import { MoviesComponent } from '@app/movies/movies.component';
@@ -49,6 +49,7 @@ import { CommonModule } from '@angular/common';
     MatTabsModule,
     MatSliderModule,
     MatGridListModule,
+    MatPaginatorModule,
     MatAutocompleteModule,
     BrowserModule,
     HttpModule,

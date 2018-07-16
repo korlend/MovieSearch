@@ -33,6 +33,9 @@
                     <movie-container [shortMovie]="movie" (movieClicked)="openMovieInTab($event)"></movie-container>
                 </ng-container>
             </div>
+            <mat-paginator [length]="lastSearch?.totalResults" [pageSize]="10" (page)="paginatorChanged($event)">
+
+            </mat-paginator>
         </mat-tab>
         <mat-tab *ngFor="let movie of openedMovies | async" label="{{movie.Title}}">
             <ng-template mat-tab-label>
