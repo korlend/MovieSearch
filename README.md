@@ -1,6 +1,13 @@
 # Project purpose
 
 Project was developed as test task to certain company.
+<br/>
+Task:
+<br/>
+Make an application to search movies, add and remove it from personal list.
+For movies search testee could use www.omdbapi.com API or any other API.
+By click on any movie user should be able to view full information about it.
+Requirements: Typescript, Angular 5, Autocomplete search, client-side saved moives list, Angular Material.
 
 ## WebClient
 
